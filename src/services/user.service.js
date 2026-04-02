@@ -15,7 +15,7 @@ export const getAllUsers = async (query) => {
   const filter = { isDeleted: false };
 
   // -------------------------
-  // 🔍 Filtering
+  // Filtering
   // -------------------------
   if (role && ["viewer", "analyst", "admin"].includes(role)) {
     filter.role = role;
@@ -26,7 +26,7 @@ export const getAllUsers = async (query) => {
   }
 
   // -------------------------
-  // 🔎 Search (name/email)
+  // Search (name/email)
   // -------------------------
   if (search) {
     filter.$or = [
@@ -36,7 +36,7 @@ export const getAllUsers = async (query) => {
   }
 
   // -------------------------
-  // 📊 Fetch Users
+  // Fetch Users
   // -------------------------
   const users = await User.find(filter)
     .sort({ createdAt: -1 })
@@ -92,14 +92,14 @@ export const updateUser = async (adminId, userId, data) => {
   }
 
   // -------------------------
-  // 🚫 Prevent self-role change (optional but strong)
+  // Prevent self-role change (optional but strong)
   // -------------------------
   if (adminId.toString() === userId.toString()) {
     throw new Error("You cannot modify your own role/status");
   }
 
   // -------------------------
-  // 🔄 Update role
+  // Update role
   // -------------------------
   if (data.role) {
     if (!["viewer", "analyst", "admin"].includes(data.role)) {
@@ -109,7 +109,7 @@ export const updateUser = async (adminId, userId, data) => {
   }
 
   // -------------------------
-  // 🔄 Update status
+  // Update status
   // -------------------------
   if (data.status) {
     if (!["active", "inactive"].includes(data.status)) {
@@ -141,7 +141,7 @@ export const deleteUser = async (adminId, userId) => {
   }
 
   // -------------------------
-  // 🚫 Prevent self-delete
+  // Prevent self-delete
   // -------------------------
   if (adminId.toString() === userId.toString()) {
     throw new Error("You cannot delete your own account");

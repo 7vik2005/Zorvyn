@@ -9,7 +9,7 @@ class APIFeatures {
   }
 
   // --------------------------------------------------
-  // 🔍 FILTERING
+  // FILTERING
   // --------------------------------------------------
   filter() {
     const queryObj = { ...this.queryString };
@@ -34,7 +34,7 @@ class APIFeatures {
   }
 
   // --------------------------------------------------
-  // 🔎 SEARCH (text-based)
+  // SEARCH (text-based)
   // --------------------------------------------------
   search(fields = []) {
     if (this.queryString.search && fields.length > 0) {
@@ -53,7 +53,7 @@ class APIFeatures {
   }
 
   // --------------------------------------------------
-  // 🔃 SORTING
+  // SORTING
   // --------------------------------------------------
   sort() {
     if (this.queryString.sort) {
@@ -68,7 +68,7 @@ class APIFeatures {
   }
 
   // --------------------------------------------------
-  // 📄 FIELD LIMITING
+  // FIELD LIMITING
   // --------------------------------------------------
   limitFields() {
     if (this.queryString.fields) {
@@ -80,7 +80,7 @@ class APIFeatures {
   }
 
   // --------------------------------------------------
-  // 📊 PAGINATION
+  // PAGINATION
   // --------------------------------------------------
   paginate() {
     const page = parseInt(this.queryString.page, 10) || 1;
