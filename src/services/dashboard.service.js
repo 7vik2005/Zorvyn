@@ -7,9 +7,7 @@ import mongoose from "mongoose";
 export const getDashboardSummary = async (userId) => {
   const userObjectId = new mongoose.Types.ObjectId(userId);
 
-  // --------------------------------------------------
-  // 1. TOTAL INCOME & EXPENSE
-  // --------------------------------------------------
+  // TOTAL INCOME & EXPENSE
   const totals = await Record.aggregate([
     {
       $match: {
@@ -35,9 +33,7 @@ export const getDashboardSummary = async (userId) => {
 
   const netBalance = totalIncome - totalExpense;
 
-  // --------------------------------------------------
-  // 2. CATEGORY-WISE TOTALS
-  // --------------------------------------------------
+  // CATEGORY-WISE TOTALS
   const categoryBreakdown = await Record.aggregate([
     {
       $match: {
@@ -59,9 +55,7 @@ export const getDashboardSummary = async (userId) => {
     },
   ]);
 
-  // --------------------------------------------------
-  // 3. MONTHLY TRENDS
-  // --------------------------------------------------
+  // MONTHLY TRENDS
   const monthlyTrends = await Record.aggregate([
     {
       $match: {
@@ -87,9 +81,7 @@ export const getDashboardSummary = async (userId) => {
     },
   ]);
 
-  // --------------------------------------------------
-  // 4. RECENT TRANSACTIONS
-  // --------------------------------------------------
+  // RECENT TRANSACTIONS
   const recentTransactions = await Record.find({
     user: userObjectId,
     isDeleted: false,
@@ -97,9 +89,7 @@ export const getDashboardSummary = async (userId) => {
     .sort({ date: -1 })
     .limit(5);
 
-  // --------------------------------------------------
-  // 5. FINAL RESPONSE
-  // --------------------------------------------------
+  // FINAL RESPONSE
   return {
     totals: {
       income: totalIncome,

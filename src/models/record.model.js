@@ -10,9 +10,7 @@ const RECORD_TYPES = ["income", "expense"];
  */
 const recordSchema = new mongoose.Schema(
   {
-    // --------------------------------------------------
     // User Reference (Owner of the record)
-    // --------------------------------------------------
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -20,18 +18,14 @@ const recordSchema = new mongoose.Schema(
       index: true,
     },
 
-    // --------------------------------------------------
     // Amount
-    // --------------------------------------------------
     amount: {
       type: Number,
       required: [true, "Amount is required"],
       min: [0, "Amount cannot be negative"],
     },
 
-    // --------------------------------------------------
     // Type (Income / Expense)
-    // --------------------------------------------------
     type: {
       type: String,
       enum: {
@@ -42,9 +36,7 @@ const recordSchema = new mongoose.Schema(
       index: true,
     },
 
-    // --------------------------------------------------
     // Category (Flexible)
-    // --------------------------------------------------
     category: {
       type: String,
       required: [true, "Category is required"],
@@ -53,27 +45,21 @@ const recordSchema = new mongoose.Schema(
       index: true,
     },
 
-    // --------------------------------------------------
     // Date of transaction
-    // --------------------------------------------------
     date: {
       type: Date,
       required: [true, "Date is required"],
       index: true,
     },
 
-    // --------------------------------------------------
     // Notes / Description
-    // --------------------------------------------------
     note: {
       type: String,
       trim: true,
       maxlength: [200, "Note cannot exceed 200 characters"],
     },
 
-    // --------------------------------------------------
     // Soft Delete
-    // --------------------------------------------------
     isDeleted: {
       type: Boolean,
       default: false,

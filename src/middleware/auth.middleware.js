@@ -8,18 +8,14 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    // --------------------------------------------------
-    // 1. Extract Token from Authorization Header
-    // --------------------------------------------------
+    // Extract Token from Authorization Header
     const authHeader = req.headers.authorization;
 
     if (authHeader && authHeader.startsWith("Bearer ")) {
       token = authHeader.split(" ")[1];
     }
 
-    // --------------------------------------------------
     // 2. Check if Token Exists
-    // --------------------------------------------------
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -27,9 +23,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 3. Verify Token
-    // --------------------------------------------------
+    // Verify Token
     let decoded;
 
     try {
@@ -56,9 +50,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 4. Validate Decoded Payload
-    // --------------------------------------------------
+    // Validate Decoded Payload
     if (!decoded || !decoded.id) {
       return res.status(401).json({
         success: false,
@@ -66,16 +58,12 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 5. Fetch User from Database
-    // --------------------------------------------------
+    // Fetch User from Database
     const user = await User.findById(decoded.id).select(
       "_id role status isDeleted",
     );
 
-    // --------------------------------------------------
-    // 6. Check if User Exists
-    // --------------------------------------------------
+    // Check if User Exists
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -83,9 +71,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 7. Check Soft Delete
-    // --------------------------------------------------
+    // Check Soft Delete
     if (user.isDeleted) {
       return res.status(401).json({
         success: false,
@@ -93,9 +79,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 8. Check User Status
-    // --------------------------------------------------
+    // Check User Status
     if (user.status !== "active") {
       return res.status(403).json({
         success: false,
@@ -103,17 +87,13 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // --------------------------------------------------
-    // 9. Attach User to Request
-    // --------------------------------------------------
+    // Attach User to Request
     req.user = {
       id: user._id,
       role: user.role,
     };
 
-    // --------------------------------------------------
-    // 10. Continue to Next Middleware
-    // --------------------------------------------------
+    // Continue to Next Middleware
     next();
   } catch (error) {
     console.error("Auth Middleware Error:", error);

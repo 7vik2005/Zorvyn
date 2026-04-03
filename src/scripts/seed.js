@@ -17,9 +17,7 @@ const seedData = async () => {
     await mongoose.connect(MONGO_URI);
     console.log("Connected to MongoDB for seeding...");
 
-    // --------------------------------------------------
-    // 1. Create Admin User (if not exists)
-    // --------------------------------------------------
+    // Create Admin User (if not exists)
     const existingAdmin = await User.findOne({ email: "admin@zorvyn.com" });
 
     let adminUser;
@@ -37,9 +35,7 @@ const seedData = async () => {
       console.log("Admin user already exists, skipping...");
     }
 
-    // --------------------------------------------------
-    // 2. Create Analyst User (if not exists)
-    // --------------------------------------------------
+    // Create Analyst User (if not exists)
     const existingAnalyst = await User.findOne({
       email: "analyst@zorvyn.com",
     });
@@ -57,9 +53,7 @@ const seedData = async () => {
       console.log("Analyst user already exists, skipping...");
     }
 
-    // --------------------------------------------------
-    // 3. Create Viewer User (if not exists)
-    // --------------------------------------------------
+    // Create Viewer User (if not exists)
     const existingViewer = await User.findOne({ email: "viewer@zorvyn.com" });
 
     if (!existingViewer) {
@@ -75,9 +69,7 @@ const seedData = async () => {
       console.log("Viewer user already exists, skipping...");
     }
 
-    // --------------------------------------------------
-    // 4. Create Sample Records (for admin user)
-    // --------------------------------------------------
+    // Create Sample Records (for admin user)
     const recordCount = await Record.countDocuments({ user: adminUser._id });
 
     if (recordCount === 0) {
@@ -170,9 +162,7 @@ const seedData = async () => {
       console.log("Records already exist for admin, skipping...");
     }
 
-    // --------------------------------------------------
     // Done
-    // --------------------------------------------------
     console.log("\nSeed completed successfully!");
     console.log("\nTest Credentials:");
     console.log("  Admin:   admin@zorvyn.com   / admin123");

@@ -6,9 +6,7 @@ import { authLimiter } from "../middleware/rateLimit.middleware.js";
 const router = express.Router();
 
 /**
- * --------------------------------------------------
  * ROUTES: /api/auth
- * --------------------------------------------------
  */
 
 /**

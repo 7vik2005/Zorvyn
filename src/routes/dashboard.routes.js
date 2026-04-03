@@ -7,9 +7,7 @@ import { authorize } from "../middleware/role.middleware.js";
 const router = express.Router();
 
 /**
- * --------------------------------------------------
  * ROUTES: /api/dashboard
- * --------------------------------------------------
  */
 
 /**

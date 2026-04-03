@@ -2,15 +2,21 @@
  * API Features Utility Class
  * Handles filtering, search, sorting, pagination
  */
+
+/**
+ * Utility: Escape special regex characters from user input
+ */
+const escapeRegex = (str) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query; // mongoose query
     this.queryString = queryString; // req.query
   }
 
-  // --------------------------------------------------
   // FILTERING
-  // --------------------------------------------------
   filter() {
     const queryObj = { ...this.queryString };
 
@@ -33,12 +39,11 @@ class APIFeatures {
     return this;
   }
 
-  // --------------------------------------------------
-  // SEARCH (text-based)
-  // --------------------------------------------------
+  // SEARCH (text-based) — with regex escaping
   search(fields = []) {
     if (this.queryString.search && fields.length > 0) {
-      const searchRegex = new RegExp(this.queryString.search, "i");
+      const safeSearch = escapeRegex(this.queryString.search.substring(0, 100));
+      const searchRegex = new RegExp(safeSearch, "i");
 
       const searchConditions = fields.map((field) => ({
         [field]: searchRegex,
@@ -52,9 +57,7 @@ class APIFeatures {
     return this;
   }
 
-  // --------------------------------------------------
   // SORTING
-  // --------------------------------------------------
   sort() {
     if (this.queryString.sort) {
       // multiple fields: sort=amount,-date
@@ -67,9 +70,7 @@ class APIFeatures {
     return this;
   }
 
-  // --------------------------------------------------
   // FIELD LIMITING
-  // --------------------------------------------------
   limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(",").join(" ");
@@ -79,12 +80,15 @@ class APIFeatures {
     return this;
   }
 
-  // --------------------------------------------------
-  // PAGINATION
-  // --------------------------------------------------
+  // PAGINATION (with bounds clamping)
   paginate() {
-    const page = parseInt(this.queryString.page, 10) || 1;
-    const limit = parseInt(this.queryString.limit, 10) || 10;
+    let page = parseInt(this.queryString.page, 10) || 1;
+    let limit = parseInt(this.queryString.limit, 10) || 10;
+
+    // Clamp to safe bounds
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 1;
+    if (limit > 100) limit = 100;
 
     const skip = (page - 1) * limit;
 

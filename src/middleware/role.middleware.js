@@ -9,9 +9,7 @@
 export const authorize = (...allowedRoles) => {
   return (req, res, next) => {
     try {
-      // --------------------------------------------------
-      // 1. Check if user exists in request
-      // --------------------------------------------------
+      // Check if user exists in request
       if (!req.user) {
         return res.status(401).json({
           success: false,
@@ -21,9 +19,7 @@ export const authorize = (...allowedRoles) => {
 
       const userRole = req.user.role;
 
-      // --------------------------------------------------
-      // 2. Validate role existence
-      // --------------------------------------------------
+      // Validate role existence
       if (!userRole) {
         return res.status(403).json({
           success: false,
@@ -31,16 +27,12 @@ export const authorize = (...allowedRoles) => {
         });
       }
 
-      // --------------------------------------------------
-      // 3. If no roles specified → allow access (fallback safety)
-      // --------------------------------------------------
+      // If no roles specified → allow access (fallback safety)
       if (!allowedRoles || allowedRoles.length === 0) {
         return next();
       }
 
-      // --------------------------------------------------
-      // 4. Check if user's role is allowed
-      // --------------------------------------------------
+      // Check if user's role is allowed
       if (!allowedRoles.includes(userRole)) {
         return res.status(403).json({
           success: false,
@@ -48,9 +40,7 @@ export const authorize = (...allowedRoles) => {
         });
       }
 
-      // --------------------------------------------------
-      // 5. Authorized → proceed
-      // --------------------------------------------------
+      // Authorized → proceed
       next();
     } catch (error) {
       console.error("RBAC Middleware Error:", error);
